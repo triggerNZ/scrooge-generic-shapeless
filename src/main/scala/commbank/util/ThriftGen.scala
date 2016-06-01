@@ -10,9 +10,6 @@ import com.twitter.scrooge.ThriftStruct
 object ThriftGen {
   def apply[T <: ThriftStruct](implicit gen: Generic[T]): Generic.Aux[T, gen.Repr] = gen
   implicit def thriftGen[T <: ThriftStruct, R]: Generic.Aux[T, R] = macro ThriftGenericMacros.materialize[T, R]
-
-
-  def echoType[T](t:T): Unit = macro ThriftGenericMacros.echoType[T]
 }
 
 @macrocompat.bundle
@@ -21,10 +18,7 @@ class ThriftGenericMacros(val c: whitebox.Context) extends CaseClassMacros {
   import internal.constantType
   import Flag._
 
-  def echoType[T : WeakTypeTag](t: Tree) = {
-    println(weakTypeOf[T])
-    q"()"
-  }
+
 
   def thriftStructTpe = typeOf[ThriftStruct]
 
@@ -66,8 +60,6 @@ class ThriftGenericMacros(val c: whitebox.Context) extends CaseClassMacros {
       }
       new $clsName(): _root_.shapeless.Generic.Aux[$tpe, ${reprType}]
     """
-    println(output)
-
     output
   }
 
