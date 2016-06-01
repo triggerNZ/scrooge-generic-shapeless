@@ -9,7 +9,7 @@ import com.twitter.scrooge.ThriftStruct
 
 object ThriftGen {
   def apply[T <: ThriftStruct](implicit gen: Generic[T]): Generic.Aux[T, gen.Repr] = gen
-  implicit def thriftGen[T <: ThriftStruct, R]: Generic[T] = macro ThriftGenericMacros.materialize[T, R]
+  implicit def thriftGen[T <: ThriftStruct, R]: Generic.Aux[T, R] = macro ThriftGenericMacros.materialize[T, R]
 
 
   def echoType[T](t:T): Unit = macro ThriftGenericMacros.echoType[T]
