@@ -65,11 +65,6 @@ class ThriftGenericMacros(val c: whitebox.Context) extends CaseClassMacros {
 
   object ThriftCtorDtor {
     def apply(tpe: Type): CtorDtor = {
-      val sym = tpe.typeSymbol
-      val isCaseClass = sym.asClass.isCaseClass
-
-      val repWCard = Star(Ident(termNames.WILDCARD))  // like pq"_*" except that it does work
-
       def narrow(tree: Tree, tpe: Type): Tree =
         tpe match {
           case ConstantType(c) =>
@@ -84,19 +79,6 @@ class ThriftGenericMacros(val c: whitebox.Context) extends CaseClassMacros {
         else
           narrow(tree, tpe)
 
-      def mkCtorDtor0(elems0: List[(TermName, Type)]) = {
-        val elems = elems0.map { case (name, tpe) => (TermName(c.freshName("pat")), tpe) }
-        val pattern = pq"${companionRef(tpe)}(..${elems.map { case (binder, tpe) => if(isVararg(tpe)) pq"$binder @ $repWCard" else pq"$binder"}})"
-        val reprPattern =
-          elems.foldRight(q"_root_.shapeless.HNil": Tree) {
-            case ((bound, _), acc) => pq"_root_.shapeless.::($bound, $acc)"
-          }
-        new CtorDtor {
-          def construct(args: List[Tree]): Tree = q"${companionRef(tpe)}(..$args)"
-          def binding: (Tree, List[Tree]) = (pattern, elems.map { case (binder, tpe) => narrow(q"$binder", tpe) })
-          def reprBinding: (Tree, List[Tree]) = (reprPattern, elems.map { case (binder, tpe) => narrow1(q"$binder", tpe) })
-        }
-      }
 
       def mkCtorDtor1(elems: List[(TermName, TermName, Type)], pattern: Tree, rhs: List[Tree]) = {
         val reprPattern =
