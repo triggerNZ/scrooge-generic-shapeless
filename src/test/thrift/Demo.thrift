@@ -1,4 +1,4 @@
-#@namespace scala commbank.util.thrift
+#@namespace scala commbank.util.scrooge.thrift
 
 struct Demo {
   1  : string id

@@ -1,4 +1,4 @@
-package commbank.util
+package commbank.util.scrooge
 
 import shapeless._, test.illTyped
 import org.specs2._

@@ -1,6 +1,5 @@
-name := "scrooge-generic-shapeless"
+uniform.project("scrooge-generic-shapeless", "commbank.util.scrooge")
 
-scalaVersion := "2.11.8"
 
 libraryDependencies ++= Seq(
   "org.apache.thrift" % "libthrift" % "0.8.0",

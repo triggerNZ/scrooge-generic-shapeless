@@ -1,4 +1,4 @@
-package commbank.util
+package commbank.util.scrooge
 
 import scala.language.experimental.macros
 
