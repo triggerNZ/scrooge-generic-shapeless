@@ -11,3 +11,10 @@ libraryDependencies ++= Seq(
 )
 
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+
+
+//The two settings below are because scrooge output conflicts with uniform
+
+(scroogeThriftOutputFolder in Compile) <<= (sourceManaged in Compile) (_ / "scrooge")
+
+(scroogeThriftOutputFolder in Test) <<= (sourceManaged in Test) (_ / "scrooge")
