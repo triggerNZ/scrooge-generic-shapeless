@@ -1,6 +1,5 @@
-name := "scrooge-generic-shapeless"
+uniform.project("scrooge-generic-shapeless", "commbank.util.scrooge")
 
-scalaVersion := "2.11.8"
 
 libraryDependencies ++= Seq(
   "org.apache.thrift" % "libthrift" % "0.8.0",
@@ -12,3 +11,10 @@ libraryDependencies ++= Seq(
 )
 
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+
+
+//The two settings below are because scrooge output conflicts with uniform
+
+(scroogeThriftOutputFolder in Compile) <<= (sourceManaged in Compile) (_ / "scrooge")
+
+(scroogeThriftOutputFolder in Test) <<= (sourceManaged in Test) (_ / "scrooge")

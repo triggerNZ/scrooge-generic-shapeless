@@ -1,4 +1,4 @@
-package commbank.util
+package commbank.util.scrooge
 
 import shapeless._, test.illTyped
 import org.specs2._
@@ -17,15 +17,15 @@ object ThriftGenSpec extends Specification {
     import ThriftGen._
     val gen = implicitly[Generic[Demo]]
 
-    gen.to(Demo("Hello", "World")) === "Hello" :: "World" :: HNil
+    gen.to(Demo("Hello", "World")) === "Hello" :: "World" :: None :: HNil
   }
 
     def canDeriveGenExplicit = {
       import ThriftGen._
-      val genExplicit = implicitly[Generic.Aux[Demo, String :: String :: HNil]]
+      val genExplicit = implicitly[Generic.Aux[Demo, String :: String :: Option[Int] :: HNil]]
 
-      val hlist : String :: String :: HNil = genExplicit.to(Demo("Hello", "World"))
-      hlist === "Hello" :: "World" :: HNil
+      val hlist : String :: String :: Option[Int] :: HNil = genExplicit.to(Demo("Hello", "World", Some(31)))
+      hlist === "Hello" :: "World" :: Some(31) :: HNil
     }
 
     def nonScrooge = {

@@ -1,0 +1,30 @@
+language: scala
+jdk:
+- oraclejdk7
+sudo: true
+
+cache:
+  apt: true
+  directories:
+  - $HOME/.ivy2
+  - $HOME/.m2
+install:
+- git clone https://github.com/CommBank/ci.git
+- chmod ugo+x ci/*
+- ci/sbt-setup.sh
+- ci/sbt-setup-version.sh
+script:
+- sbt -Dsbt.global.base=$TRAVIS_BUILD_DIR/ci '; test; package' && ci/sbt-deploy-to.sh
+  libs-releases-local
+after_script:
+- rm -rf ci
+notifications:
+  webhooks:
+    urls:
+    - https://webhooks.gitter.im/e/cdf509e34fa8a515af84
+    on_success: change
+    on_failure: always
+    on_start: false
+env:
+  global:
+    secure: OEC3ZHim79iHylEpE16wpxbPdV5tIH0B259PF/iwnd03KUrZpN0Wm65jf0FmZRbQi6PV5m3MTW6uoLaZrntRkfGV3Y5wWngMnuUqSTKI2YdB7ELsPFhQm/WPo8THniC++USpaN3vJodSZyMrjBONUO92NifBMDVS0WZVBXalglbrCQ8hL38d/t8okKqV/Mgi8JC53bETQnCDKjqxXZcEmWBdp5lTlhdIu3MUxpzGrjXfW8UjsETVXBHA72DCovpD4CJa1NUlUMeHHmXqvdb0S/NiJmRKzqdye6jmtd08ErNAWpwM6fbc3NxUtilnuAGDoGzH/D+na6j1X7QOA7M6Ugx4ViH9uMyKJhAeS+5/0s4RWkhRWQbmUnG3IJjI5+OD2CmOEeev2UnCkL7f2nWVS6F+149qwBHT2RKWacSrq+SpkG1I7PQLcxDg3T07/c+FPukXkwvLx/CJcQxTyRU0i0YLjqq3TkimKgJHCwD6Hy+MyQkc3INkKehASLtFC5eVUvrERnfegMF/qJDC9xyagPc/c9MojABXrBMVOqjiwx+0uojmrTXeAefvGQ4GL0uZTdNXOhaZe8MBpCphsykz9NGWi1/tNxnoZYt6x5qQW8691sXVmqJAPg1u6mSi+EyknBygdzE4Ak/ptff73KXe3gZvAp5e3gyu/7nxdZx3EFE=
